@@ -19,6 +19,7 @@ int getSensorValue(void);
 void setup()
 {
   // put your setup code here, to run once:
+  Serial.begin(9600);
   sensorPinInit();
   motorPinInit();
 }
