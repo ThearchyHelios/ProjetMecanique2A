@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "port": "/dev/tty.usbmodem3301",
+    "programmer": "arduino:avrispmkii",
+    "sketch": "sketch_mar26a/sketch_mar26a.ino"
+}
