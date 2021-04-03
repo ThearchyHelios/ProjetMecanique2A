@@ -28,7 +28,7 @@ int getSensorValue(void);
 void setup()
 {
   // put your setup code here, to run once:
-  // Set purt 9600
+  // Set port 9600
   Serial.begin(9600);
 
   // Init sensor
