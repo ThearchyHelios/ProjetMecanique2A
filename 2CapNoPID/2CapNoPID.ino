@@ -122,7 +122,7 @@ int getSensorValue()
   sensor[0] = digitalRead(left_sensor_pin);
   sensor[1] = digitalRead(right_sensor_pin);
   if (sensor[0] == 0 && sensor[1] == 0)
-  {
+  { 
     error = 0; // 00 Arreter
   }
   else if (sensor[0] == 0 && sensor[1] == 1)
