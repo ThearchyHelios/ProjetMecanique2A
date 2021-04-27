@@ -121,21 +121,21 @@ int getSensorValue()
   // Read semsors' signals
   sensor[0] = digitalRead(left_sensor_pin);
   sensor[1] = digitalRead(right_sensor_pin);
-  if (sensor[0] == 0 && sensor[1] == 0)
+  if (sensor[0] == 1 && sensor[1] == 1)
   { 
-    error = 0; // 00 Arreter
-  }
-  else if (sensor[0] == 0 && sensor[1] == 1)
-  {
-    error = -1; // 01 Droite
+    error = 0; // 11 Arreter
   }
   else if (sensor[0] == 1 && sensor[1] == 0)
   {
-    error = 1; // 10 Gauche
+    error = -1; // 10 Droite
   }
-  else if (sensor[0] == 1 && sensor[1] == 1)
+  else if (sensor[0] == 0 && sensor[1] == 1)
   {
-    error = 0; // 11 Aller
+    error = 1; // 01 Gauche
+  }
+  else if (sensor[0] == 0 && sensor[1] == 0)
+  {
+    error = -2; // 00 Aller (Error)
   }
   return error;
 }
