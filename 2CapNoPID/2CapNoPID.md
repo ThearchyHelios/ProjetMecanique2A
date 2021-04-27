@@ -24,9 +24,9 @@ Main Frame{
         if(sensor [0] == 0 && sensor [1] == 0){
             error = 0 // Arreter
         } else if (sensor [0] == 0 && sensor [1] == 1){
-            error = -1 // Droite
+            error = -1 // Gauche
         } else if (sensor [0] == 1 && sensor [1] == 0){
-            error = 1 // Gauche
+            error = 1 // Droite
         } else if (sensor [0] == 1 && sensor [1] == 1){
             error = 0 // Aller
         }
