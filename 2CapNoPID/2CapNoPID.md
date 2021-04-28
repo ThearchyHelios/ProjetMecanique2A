@@ -21,18 +21,11 @@ Main Frame{
     Get Values(){
         sensor [0] = Le capteur gauche
         sensor [1] = Le capteur droit
-        if(sensor [0] == 0 && sensor [1] == 0){
-            error = 0 // Arreter
-        } else if (sensor [0] == 0 && sensor [1] == 1){
-            error = -1 // Gauche
-        } else if (sensor [0] == 1 && sensor [1] == 0){
-            error = 1 // Droite
-        } else if (sensor [0] == 1 && sensor [1] == 1){
-            error = 0 // Aller
-        }
-        return error
+
+        Utiliser le valeur obtenu et combiner avec le table
     }
-    Controler le moteur (){
+
+    Controller le moteur (){
         - Gauche()
         - Droite()
         - Aller()

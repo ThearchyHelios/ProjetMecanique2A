@@ -1,11 +1,15 @@
 ## Pseudo Code pour le Voiture d'évitement d'obstacles
 
-| Le code (Gauche) | Le code (Droite) | Le code (Avant) | On va faire   |
-| ---------------- | ---------------- | --------------- | ------------- |
-| 1                | 1                | 0               | Aller         |
-| 0                | 0                | 1               | Arret (ERROR) |
-| 1                | 0                | 1               | Droite        |
-| 0                | 1                | 1               | Gauche        |
+| Le code (Gauche) | Le code (Droite) | Le code (Avant) | On va faire                           |
+| ---------------- | ---------------- | --------------- | ------------------------------------- |
+| 1                | 1                | 0               | Aller                                 |
+| 0                | 0                | 1               | Arret (ERROR Then Aller)              |
+| 1                | 1                | 1               | Arret (Aller)                         |
+| 1                | 0                | 1               | Grande Droite                         |
+| 1                | 0                | 0               | Petit Droite                          |
+| 0                | 1                | 1               | Grande Gauche                         |
+| 0                | 1                | 0               | Petit Gauche                          |
+| 0                | 0                | 0               | Discuter Sharp Gauche ou Sharp Droite |
 
 ```cpp
 Main Frame{
@@ -22,25 +26,16 @@ Main Frame{
         sensor [0] = Le capteur gauche
         sensor [1] = Le capteur droit
         sensor [2] = Le capteur avant
-        if(sensor [0] == 1 && sensor [1] == 1 && sensor[2] == 1){
-            error = 0 // Arreter
-        } else if (sensor [0] == 0 && sensor [1] == 1 && sensor[2] == 1){
-            _delay(tmp)
-            error = -1 // Droite
-        } else if (sensor [0] == 1 && sensor [1] == 0) && sensor [2] == 1{
-            _delay(tmp)
-            error = 1 // Gauche
-        } else if (sensor [0] == 1 && sensor [1] == 1 && sensor[2] == 0){
-            error = 0 // Aller (error)
-        } else{
-            error = 0 // Aller
-        }
-        return error
-    }
+
+        Utiliser le valeur obtenu et combiner avec le table
 
     Controller le moteur (){
-        - Gauche()
-        - Droite()
+        - PetitGauche()
+        - GrandeGauche()
+        - SharpGauche()
+        - PetitDroite()
+        - GrandeDroite()
+        - SharpDroite()
         - Aller()
         - _stop()
     }

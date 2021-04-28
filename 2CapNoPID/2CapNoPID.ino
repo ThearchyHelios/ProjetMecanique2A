@@ -16,6 +16,9 @@ void _stop();
 void turnLeft();
 void turnRight();
 
+// Init tmp
+int tmp = 2000;
+
 // Init output value
 int error = 0;
 
@@ -54,12 +57,12 @@ void loop()
 
     // Move right
   case -1:
-    aDroite();
+    aPetitDroite();
     break;
 
     // Move left
   case 1:
-    aGauche();
+    aPetitGauche();
     break;
 
     // Stop
@@ -99,20 +102,30 @@ void aller()
   analogWrite(right_motor_pin, 50);
 }
 
-// Function aGauche
+// Function aPetitGauche
 // Feature: Make vehicle turn left
-void aGauche()
+void aPetitGauche()
 {
   analogWrite(left_motor_pin, 30);
   analogWrite(right_motor_pin, 60);
+
+  delay(tmp);
+  analogWrite(left_motor_pin, 20);
+  analogWrite(right_motor_pin, 20);
+  delay(tmp);
 }
 
-// Function aDroite
+// Function aPetitDroite
 // Feature: Make vehicle turn right
-void aDroite()
+void aPetitDroite()
 {
   analogWrite(left_motor_pin, 60);
   analogWrite(right_motor_pin, 30);
+
+  delay(tmp);
+  analogWrite(left_motor_pin, 20);
+  analogWrite(right_motor_pin, 20);
+  delay(tmp);
 }
 
 // Function Read Sensors' Values
@@ -122,7 +135,7 @@ int getSensorValue()
   sensor[0] = digitalRead(left_sensor_pin);
   sensor[1] = digitalRead(right_sensor_pin);
   if (sensor[0] == 1 && sensor[1] == 1)
-  { 
+  {
     error = 0; // 11 Arreter
   }
   else if (sensor[0] == 1 && sensor[1] == 0)
@@ -135,7 +148,7 @@ int getSensorValue()
   }
   else if (sensor[0] == 0 && sensor[1] == 0)
   {
-    error = -2; // 00 Aller (Error)
+    error = 0; // 00 Aller (Error)
   }
   return error;
 }
