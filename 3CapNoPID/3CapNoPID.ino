@@ -1,24 +1,38 @@
 // 一共两个马达， 两个传感器，前轮两个珠子 xD，后轮各两个马达
 
 // Define Motor Pin
-#define left_motor_pin 5
-#define right_motor_pin 6
+#define MOTOR_LEFT_PIN 5
+#define MOTOR_RIGHT_PIN 6
 
 // Define Sensor Pin
-#define left_sensor_pin 3
-#define right_sensor_pin 4
-#define front_sensor_pin 2
+#define SENSOR_LEFT_PIN 3
+#define SENSOR_RIGHT_PIN 4
+#define SENSOR_FRONT_PIN 2
+
+// Define Speed
+#define SPEED_LINE 60
+#define SPEED_TURN_PETIT_LOW 30
+#define SPEED_TURN_PETIT_HIGH 60
+#define SPEED_TURN_GRANDE_LOW 20
+#define SPEED_TURN_GRANDE_HIGH 80
+#define SPEED_TURN_SHARP_LOW 0
+#define SPEED_TURN_SHARP_HIGH 100
+
+#define SPEED_ADJUST_LINE 20
+#define SPEED_TRIG 0
+
+
+// Init delay temp
+#define TIME_TURN 2000
+#define TIME_ADJUST 1000
 
 void motorPinInit();
 
 // Init output value
 int error = 0;
 
-// Init delay temp
-float tmp = 2000;
-
 // A tableau with 2 sensors
-int sensor[3] = {0, 0, 0};
+int sensor[3] = {0, 0, 0}; 
 
 // Read Sensors' first value
 int getSensorValue(void);
@@ -90,118 +104,118 @@ void loop()
 // Init sensor model
 void sensorPinInit()
 {
-    pinMode(left_sensor_pin, INPUT);
-    pinMode(right_sensor_pin, INPUT);
-    pinMode(front_sensor_pin, INPUT);
+    pinMode(SENSOR_LEFT_PIN, INPUT);
+    pinMode(SENSOR_RIGHT_PIN, INPUT);
+    pinMode(SENSOR_FRONT_PIN, INPUT);
 }
 
 // Init motor model
 void motorPinInit()
 {
-    pinMode(left_motor_pin, OUTPUT);
-    pinMode(right_motor_pin, OUTPUT);
+    pinMode(MOTOR_LEFT_PIN, OUTPUT);
+    pinMode(MOTOR_RIGHT_PIN, OUTPUT);
 }
 
 // Function stop
 // Feature: Stop the vehicle
 void _stop()
 {
-    analogWrite(left_motor_pin, 0);
-    analogWrite(right_motor_pin, 0);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TRIG);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TRIG);
 }
 
 // Function aller
 // Feature: Make vehicle move forward
 void aller()
 {
-    analogWrite(left_motor_pin, 50);
-    analogWrite(right_motor_pin, 50);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_LINE);
 }
 
 // Function aPetitGauche
 // Feature: Make vehicle turn left, then slow down for a moment
 void aPetitGauche()
 {
-    analogWrite(left_motor_pin, 30);
-    analogWrite(right_motor_pin, 60);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_PETIT_LOW);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_PETIT_HIGH);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function aGrandeGauche
 // Feature: Make vehicle turn sharp left, then slow down for a moment
 void aGrandeGauche()
 {
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 80);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_GRANDE_LOW);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_GRANDE_HIGH);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function aSharpGauche
 // Feature: Make vehicle turn big left, then slow down for a moment
 void aSharpGauche()
 {
-    analogWrite(left_motor_pin, 0);
-    analogWrite(right_motor_pin, 100);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_SHARP_LOW);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_SHARP_HIGH);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function aPetitDroite
 // Feature: Make vehicle turn right, then slow down for a moment
 void aPetitDroite()
 {
-    analogWrite(left_motor_pin, 60);
-    analogWrite(right_motor_pin, 30);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_PETIT_HIGH);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_PETIT_LOW);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function aGrandeDroite
 // Feature: Make vehicle turn big right, then slow down for a moment
 void aGrandeDroite()
 {
-    analogWrite(left_motor_pin, 80);
-    analogWrite(right_motor_pin, 20);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_GRANDE_HIGH);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_GRANDE_LOW);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function aSharpDroite
 // Feature: Make vehicle turn sharp right, then slow down for a moment
 void aSharpDroite()
 {
-    analogWrite(left_motor_pin, 100);
-    analogWrite(right_motor_pin, 0);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_SHARP_HIGH);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_SHARP_LOW);
 
-    delay(tmp);
-    analogWrite(left_motor_pin, 20);
-    analogWrite(right_motor_pin, 20);
-    delay(tmp);
+    delay(TIME_TURN);
+    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    delay(TIME_ADJUST);
 }
 
 // Function Read Sensors' Values
 int getSensorValue()
 {
     // Read semsors' signals
-    sensor[0] = digitalRead(left_sensor_pin);
-    sensor[1] = digitalRead(right_sensor_pin);
+    sensor[0] = digitalRead(SENSOR_LEFT_PIN);
+    sensor[1] = digitalRead(SENSOR_RIGHT_PIN);
     if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
     {
         error = 0; // 110 Aller
@@ -234,11 +248,11 @@ int getSensorValue()
     {
         if (error == -2)
         {
-            error = -3;
+            error = -3; // Sharp Gauche
         }
         else
         {
-            error = 3;
+            error = 3; // Sharp Droite
         }
     }
     return error;
