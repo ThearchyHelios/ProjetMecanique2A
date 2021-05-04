@@ -5,9 +5,12 @@
 #define MOTOR_RIGHT_PIN 6
 
 // Define Sensor Pin
-#define SENSOR_LEFT_PIN 3
-#define SENSOR_RIGHT_PIN 4
-#define SENSOR_FRONT_PIN 2
+#define SENSOR_LEFT_PIN_INPUT 3
+#define SENSOR_LEFT_PIN_OUTPUT 4
+#define SENSOR_RIGHT_PIN_INPUT 5
+#define SENSOR_RIGHT_PIN_OUTPUT 6
+#define SENSOR_FRONT_PIN_INPUT 7
+#define SENSOR_FRONT_PIN_OUTPUT 8
 
 // Define Speed
 #define SPEED_LINE 60
@@ -21,7 +24,6 @@
 #define SPEED_ADJUST_LINE 20
 #define SPEED_TRIG 0
 
-
 // Init delay temp
 #define TIME_TURN 2000
 #define TIME_ADJUST 1000
@@ -32,7 +34,7 @@ void motorPinInit();
 int error = 0;
 
 // A tableau with 2 sensors
-int sensor[3] = {0, 0, 0}; 
+int sensor[3] = {0, 0, 0};
 
 // Read Sensors' first value
 int getSensorValue(void);
@@ -104,11 +106,82 @@ void loop()
 // Init sensor model
 void sensorPinInit()
 {
-    pinMode(SENSOR_LEFT_PIN, INPUT);
-    pinMode(SENSOR_RIGHT_PIN, INPUT);
-    pinMode(SENSOR_FRONT_PIN, INPUT);
+    pinMode(SENSOR_LEFT_PIN_INPUT, INPUT);
+    pinMode(SENSOR_LEFT_PIN_OUTPUT, OUTPUT);
+    pinMode(SENSOR_RIGHT_PIN_INPUT, INPUT);
+    pinMode(SENSOR_RIGHT_PIN_OUTPUT, OUTPUT);
+    pinMode(SENSOR_FRONT_PIN_INPUT, INPUT);
+    pinMode(SENSOR_FRONT_PIN_OUTPUT, OUTPUT);
 }
 
+int sensorValueLeft()
+{
+    digitalWrite(SENSOR_LEFT_PIN_OUTPUT, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(SENSOR_LEFT_PIN_OUTPUT, LOW);
+
+    long tmp;
+    tmp = pulseIn(SENSOR_LEFT_PIN_INPUT, HIGH);
+    tmp = tmp / 2;
+
+    float distance;
+    distance = tmp * 340 / 10000;
+
+    if (distance > 15)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int sensorValueRight()
+{
+    digitalWrite(SENSOR_RIGHT_PIN_OUTPUT, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(SENSOR_RIGHT_PIN_OUTPUT, LOW);
+
+    long tmp;
+    tmp = pulseIn(SENSOR_RIGHT_PIN_INPUT, HIGH);
+    tmp = tmp / 2;
+
+    float distance;
+    distance = tmp * 340 / 10000;
+
+    if (distance > 15)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int sensorValueFront()
+{
+    digitalWrite(SENSOR_FRONT_PIN_OUTPUT, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(SENSOR_FRONT_PIN_OUTPUT, LOW);
+
+    long tmp;
+    tmp = pulseIn(SENSOR_FRONT_PIN_INPUT, HIGH);
+    tmp = tmp / 2;
+
+    float distance;
+    distance = tmp * 340 / 10000;
+
+    if (distance > 15)
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
 // Init motor model
 void motorPinInit()
 {
@@ -214,8 +287,10 @@ void aSharpDroite()
 int getSensorValue()
 {
     // Read semsors' signals
-    sensor[0] = digitalRead(SENSOR_LEFT_PIN);
-    sensor[1] = digitalRead(SENSOR_RIGHT_PIN);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    
     if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
     {
         error = 0; // 110 Aller
