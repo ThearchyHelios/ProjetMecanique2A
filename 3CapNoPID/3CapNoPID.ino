@@ -28,6 +28,8 @@
 #define TIME_TURN 2000
 #define TIME_ADJUST 1000
 
+float VITESSE_CM_PAR_SECOND = 340.00;
+
 void motorPinInit();
 
 // Init output value
@@ -124,8 +126,9 @@ int sensorValueLeft()
     tmp = pulseIn(SENSOR_LEFT_PIN_INPUT, HIGH);
     tmp = tmp / 2;
 
+    // cm
     float distance;
-    distance = tmp * 340 / 10000;
+    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
 
     if (distance > 15)
     {
@@ -148,7 +151,7 @@ int sensorValueRight()
     tmp = tmp / 2;
 
     float distance;
-    distance = tmp * 340 / 10000;
+    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
 
     if (distance > 15)
     {
@@ -171,7 +174,7 @@ int sensorValueFront()
     tmp = tmp / 2;
 
     float distance;
-    distance = tmp * 340 / 10000;
+    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
 
     if (distance > 15)
     {
@@ -290,7 +293,7 @@ int getSensorValue()
     sensor[0] = sensorValueLeft();
     sensor[1] = sensorValueRight();
     sensor[2] = sensorValueFront();
-    
+
     if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
     {
         error = 0; // 110 Aller
