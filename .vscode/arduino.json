@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:uno",
-    "port": "/dev/cu.usbmodem3101",
+    "port": "/dev/tty.usbmodem2101",
     "programmer": "arduino:avrispmkii",
     "sketch": "3CapNoPID/3CapNoPID.ino"
 }
