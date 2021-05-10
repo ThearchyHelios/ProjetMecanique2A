@@ -75,43 +75,43 @@ void loop()
 // Init sensor model
 void sensorPinInit()
 {
-  pinMode(left_sensor_pin, INPUT);
-  pinMode(right_sensor_pin, INPUT);
+  pinMode(SENSOR_LEFT_PIN, INPUT);
+  pinMode(SENSOR_RIGHT_PIN, INPUT);
 }
 
 // Init motor model
 void motorPinInit()
 {
-  pinMode(left_motor_pin, OUTPUT);
-  pinMode(right_motor_pin, OUTPUT);
+  pinMode(MOTOR_LEFT_PIN, OUTPUT);
+  pinMode(MOTOR_RIGHT_PIN, OUTPUT);
 }
 
 // Function stop
 // Feature: Stop the vehicle
 void _stop()
 {
-  analogWrite(left_motor_pin, 0);
-  analogWrite(right_motor_pin, 0);
+  analogWrite(MOTOR_LEFT_PIN, 0);
+  analogWrite(MOTOR_RIGHT_PIN, 0);
 }
 
 // Function aller
 // Feature: Make vehicle move forward
 void aller()
 {
-  analogWrite(left_motor_pin, 50);
-  analogWrite(right_motor_pin, 50);
+  analogWrite(MOTOR_LEFT_PIN, 50);
+  analogWrite(MOTOR_RIGHT_PIN, 50);
 }
 
 // Function aPetitGauche
 // Feature: Make vehicle turn left
 void aPetitGauche()
 {
-  analogWrite(left_motor_pin, 30);
-  analogWrite(right_motor_pin, 60);
+  analogWrite(MOTOR_LEFT_PIN, 30);
+  analogWrite(MOTOR_RIGHT_PIN, 60);
 
   delay(tmp);
-  analogWrite(left_motor_pin, 20);
-  analogWrite(right_motor_pin, 20);
+  analogWrite(MOTOR_LEFT_PIN, 20);
+  analogWrite(MOTOR_RIGHT_PIN, 20);
   delay(tmp);
 }
 
@@ -119,12 +119,12 @@ void aPetitGauche()
 // Feature: Make vehicle turn right
 void aPetitDroite()
 {
-  analogWrite(left_motor_pin, 60);
-  analogWrite(right_motor_pin, 30);
+  analogWrite(MOTOR_LEFT_PIN, 60);
+  analogWrite(MOTOR_RIGHT_PIN, 30);
 
   delay(tmp);
-  analogWrite(left_motor_pin, 20);
-  analogWrite(right_motor_pin, 20);
+  analogWrite(MOTOR_LEFT_PIN, 20);
+  analogWrite(MOTOR_RIGHT_PIN, 20);
   delay(tmp);
 }
 
@@ -132,8 +132,8 @@ void aPetitDroite()
 int getSensorValue()
 {
   // Read semsors' signals
-  sensor[0] = digitalRead(left_sensor_pin);
-  sensor[1] = digitalRead(right_sensor_pin);
+  sensor[0] = digitalRead(SENSOR_LEFT_PIN);
+  sensor[1] = digitalRead(SENSOR_RIGHT_PIN);
   if (sensor[0] == 1 && sensor[1] == 1)
   {
     error = 0; // 11 Arreter
