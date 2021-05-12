@@ -144,7 +144,7 @@ int sensorValueFront()
     distance = sensor_front.MeasureInCentimeters();
     delay(10);
 
-    if (distance > 15)
+    if (distance > 25)
     {
         return 0;
     }
