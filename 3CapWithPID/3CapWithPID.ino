@@ -193,16 +193,16 @@ int sensorValueFront()
 // Init motor model
 void motorPinInit()
 {
-    pinMode(MOTOR_LEFT_PIN, OUTPUT);
-    pinMode(MOTOR_RIGHT_PIN, OUTPUT);
+    pinMode(MOTOR_LEFT_VITESSE, OUTPUT);
+    pinMode(MOTOR_RIGHT_VITESSE, OUTPUT);
 }
 
 // Function stop
 // Feature: Stop the vehicle
 void _stop()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TRIG);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TRIG);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TRIG);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TRIG);
 }
 
 void calc_pid()

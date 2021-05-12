@@ -3,8 +3,10 @@
 // 一共两个马达， 两个传感器，前轮两个珠子 xD，后轮各两个马达
 
 // Define Motor Pin
-#define MOTOR_LEFT_PIN 5
-#define MOTOR_RIGHT_PIN 6
+#define MOTOR_LEFT_VITESSE 4
+#define MOTOR_LEFT_SENS 5
+#define MOTOR_RIGHT_SENS 6
+#define MOTOR_RIGHT_VITESSE 7
 
 // Define Sensor Pin
 Ultrasonic sensor_left(A0);
@@ -154,36 +156,40 @@ int sensorValueFront()
 // Init motor model
 void motorPinInit()
 {
-    pinMode(MOTOR_LEFT_PIN, OUTPUT);
-    pinMode(MOTOR_RIGHT_PIN, OUTPUT);
+    pinMode(MOTOR_LEFT_SENS, OUTPUT);
+    pinMode(MOTOR_RIGHT_SENS, OUTPUT);
 }
 
 // Function stop
 // Feature: Stop the vehicle
 void _stop()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TRIG);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TRIG);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TRIG);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TRIG);
 }
 
 // Function aller
 // Feature: Make vehicle move forward
 void aller()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_LINE);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_LINE);
 }
 
 // Function aPetitGauche
 // Feature: Make vehicle turn left, then slow down for a moment
 void aPetitGauche()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_PETIT_LOW);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_PETIT_HIGH);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_LOW);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_HIGH);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
@@ -191,12 +197,14 @@ void aPetitGauche()
 // Feature: Make vehicle turn sharp left, then slow down for a moment
 void aGrandeGauche()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_GRANDE_LOW);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_GRANDE_HIGH);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_LOW);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_GRANDE_HIGH);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
@@ -204,12 +212,14 @@ void aGrandeGauche()
 // Feature: Make vehicle turn big left, then slow down for a moment
 void aSharpGauche()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_SHARP_LOW);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_SHARP_HIGH);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_SHARP_LOW);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_SHARP_HIGH);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
@@ -217,12 +227,14 @@ void aSharpGauche()
 // Feature: Make vehicle turn right, then slow down for a moment
 void aPetitDroite()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_PETIT_HIGH);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_PETIT_LOW);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_HIGH);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_LOW);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
@@ -230,12 +242,14 @@ void aPetitDroite()
 // Feature: Make vehicle turn big right, then slow down for a moment
 void aGrandeDroite()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_GRANDE_HIGH);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_GRANDE_LOW);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_HIGH);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_GRANDE_LOW);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
@@ -243,12 +257,14 @@ void aGrandeDroite()
 // Feature: Make vehicle turn sharp right, then slow down for a moment
 void aSharpDroite()
 {
-    analogWrite(MOTOR_LEFT_PIN, SPEED_TURN_SHARP_HIGH);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_TURN_SHARP_LOW);
+    digitalWrite(MOTOR_LEFT_SENS, HIGH);
+    digitalWrite(MOTOR_RIGHT_SENS, HIGH);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_SHARP_HIGH);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_SHARP_LOW);
 
     delay(TIME_TURN);
-    analogWrite(MOTOR_LEFT_PIN, SPEED_ADJUST_LINE);
-    analogWrite(MOTOR_RIGHT_PIN, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+    analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
     delay(TIME_ADJUST);
 }
 
