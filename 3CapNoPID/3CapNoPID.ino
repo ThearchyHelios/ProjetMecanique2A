@@ -1,3 +1,5 @@
+#include <Ultrasonic.h>
+
 // 一共两个马达， 两个传感器，前轮两个珠子 xD，后轮各两个马达
 
 // Define Motor Pin
@@ -5,12 +7,9 @@
 #define MOTOR_RIGHT_PIN 6
 
 // Define Sensor Pin
-#define SENSOR_LEFT_PIN_INPUT 3
-#define SENSOR_LEFT_PIN_OUTPUT 4
-#define SENSOR_RIGHT_PIN_INPUT 5
-#define SENSOR_RIGHT_PIN_OUTPUT 6
-#define SENSOR_FRONT_PIN_INPUT 7
-#define SENSOR_FRONT_PIN_OUTPUT 8
+Ultrasonic sensor_left(A0);
+Ultrasonic sensor_front(A1);
+Ultrasonic sensor_right(A3);
 
 // Define Speed
 // PWN sont entre 0, 255
@@ -47,9 +46,6 @@ void setup()
     // put your setup code here, to run once:
     // Set port 9600
     Serial.begin(9600);
-
-    // Init sensor
-    sensorPinInit();
 
     // Init motor
     motorPinInit();
@@ -107,29 +103,12 @@ void loop()
 }
 
 // Init sensor model
-void sensorPinInit()
-{
-    pinMode(SENSOR_LEFT_PIN_INPUT, INPUT);
-    pinMode(SENSOR_LEFT_PIN_OUTPUT, OUTPUT);
-    pinMode(SENSOR_RIGHT_PIN_INPUT, INPUT);
-    pinMode(SENSOR_RIGHT_PIN_OUTPUT, OUTPUT);
-    pinMode(SENSOR_FRONT_PIN_INPUT, INPUT);
-    pinMode(SENSOR_FRONT_PIN_OUTPUT, OUTPUT);
-}
 
 int sensorValueLeft()
 {
-    digitalWrite(SENSOR_LEFT_PIN_OUTPUT, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(SENSOR_LEFT_PIN_OUTPUT, LOW);
-
-    long tmp;
-    tmp = pulseIn(SENSOR_LEFT_PIN_INPUT, HIGH);
-    tmp = tmp / 2;
-
-    // cm
-    float distance;
-    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
+    long distance;
+    distance = sensor_left.MeasureInCentimeters();
+    delay(10);
 
     if (distance > 15)
     {
@@ -143,16 +122,9 @@ int sensorValueLeft()
 
 int sensorValueRight()
 {
-    digitalWrite(SENSOR_RIGHT_PIN_OUTPUT, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(SENSOR_RIGHT_PIN_OUTPUT, LOW);
-
-    long tmp;
-    tmp = pulseIn(SENSOR_RIGHT_PIN_INPUT, HIGH);
-    tmp = tmp / 2;
-
-    float distance;
-    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
+    long distance;
+    distance = sensor_right.MeasureInCentimeters();
+    delay(10);
 
     if (distance > 15)
     {
@@ -166,16 +138,9 @@ int sensorValueRight()
 
 int sensorValueFront()
 {
-    digitalWrite(SENSOR_FRONT_PIN_OUTPUT, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(SENSOR_FRONT_PIN_OUTPUT, LOW);
-
-    long tmp;
-    tmp = pulseIn(SENSOR_FRONT_PIN_INPUT, HIGH);
-    tmp = tmp / 2;
-
-    float distance;
-    distance = tmp * VITESSE_CM_PAR_SECOND / 10000;
+    long distance;
+    distance = sensor_front.MeasureInCentimeters();
+    delay(10);
 
     if (distance > 15)
     {
