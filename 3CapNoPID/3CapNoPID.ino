@@ -37,7 +37,11 @@ int SPEED_TRIG = 0;
 int TIME_TURN = 2000;
 int TIME_ADJUST = 1000;
 
+int buttonState = 0;
+
 int angle = 0;
+
+int COUNT = 0;
 
 float VITESSE_CM_PAR_SECOND = 340.00;
 
@@ -58,71 +62,92 @@ void setup()
     // put your setup code here, to run once:
     // Set port 9600
     Serial.begin(9600);
-
+    buttonInitPin();
 }
 
 void loop()
 {
+    buttonState = digitalRead(BUTTON_PIN);
+    if (buttonState == HIGH)
+    {
+        COUNT += 1;
+    }
 
-    while(premiereCliquer){
+    while (true)
+    {
+        if (COUNT == 1)
+        {
+            premiereCliquer = true;
+            deuxiemeCliquer = false;
+            return;
+        }
+        if (COUNT == 2)
+        {
+            premiereCliquer = false;
+            deuxiemeCliquer = true;
+            return;
+        }
+    }
+    while (premiereCliquer)
+    {
         // Init moteur
         motorPinInit();
         servoMoteurPinInit();
     }
-    while(deuxiemeCliquer)
+    while (deuxiemeCliquer)
+    {
+        // put your main code here, to run repeatedly:
+        static int value = 0;
+
+        // Read sensor value
+        value = getSensorValue();
+        switch (value)
         {
-            // put your main code here, to run repeatedly:
-            static int value = 0;
+            // Move forward
+        case 0:
+            aller();
+            break;
 
-            // Read sensor value
-            value = getSensorValue();
-            switch (value)
-            {
-                // Move forward
-            case 0:
-                aller();
-                break;
+            //Sharp Right
+        case -3:
+            aSharpDroite();
+            break;
 
-                //Sharp Right
-            case -3:
-                aSharpDroite();
-                break;
+            // Big Right
+        case -2:
+            aGrandeDroite();
+            break;
 
-                // Big Right
-            case -2:
-                aGrandeDroite();
-                break;
+            // Move right
+        case -1:
+            aPetitDroite();
+            break;
 
-                // Move right
-            case -1:
-                aPetitDroite();
-                break;
+            // Move left
+        case 1:
+            aPetitGauche();
+            break;
 
-                // Move left
-            case 1:
-                aPetitGauche();
-                break;
+        case 2:
+            // Big left
+            aGrandeGauche();
+            break;
 
-            case 2:
-                // Big left
-                aGrandeGauche();
-                break;
+            // Sharp left
+        case 3:
+            aSharpGauche();
+            break;
+            // Lancer Deapeau
+        case 4:
+            servoMoteurLancerDeapeau();
+            break;
 
-                // Sharp left
-            case 3:
-                aSharpGauche();
-                break;
-                // Lancer Deapeau
-            case 4:
-                servoMoteurLancerDeapeau();
-                break;
-
-                // Stop
-            default:
-                _stop();
-                break;
-            }
+            // Stop
+        default:
+            _stop();
+            break;
         }
+    }
 }
 
 // Init sensor model
@@ -173,6 +198,13 @@ int sensorValueFront()
     {
         return 1;
     }
+}
+
+//Init Button moteur
+
+void buttonInitPin()
+{
+    pinMode(BUTTON_PIN, INPUT);
 }
 // Init servo moteur
 void servoMoteurPinInit()
