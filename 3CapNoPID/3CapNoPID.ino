@@ -1,12 +1,19 @@
+#include <Servo.h>
 #include <Ultrasonic.h>
+
+Servo servoflag;
 
 // 一共两个马达， 两个传感器，前轮两个珠子 xD，后轮各两个马达
 
 // Define Motor Pin
-#define MOTOR_LEFT_VITESSE 4
-#define MOTOR_LEFT_SENS 5
-#define MOTOR_RIGHT_SENS 6
-#define MOTOR_RIGHT_VITESSE 7
+#define MOTOR_LEFT_VITESSE 6
+#define MOTOR_LEFT_SENS 7
+#define MOTOR_RIGHT_SENS 4
+#define MOTOR_RIGHT_VITESSE 5
+
+#define SERVO_MOTEUR_PIN 5
+
+#define BUTTON_PIN 5
 
 // Define Sensor Pin
 Ultrasonic sensor_left(A0);
@@ -30,9 +37,12 @@ int SPEED_TRIG = 0;
 int TIME_TURN = 2000;
 int TIME_ADJUST = 1000;
 
+int angle = 0;
+
 float VITESSE_CM_PAR_SECOND = 340.00;
 
-void motorPinInit();
+bool premiereCliquer = false;
+bool deuxiemeCliquer = false;
 
 // Init output value
 int error = 0;
@@ -49,59 +59,70 @@ void setup()
     // Set port 9600
     Serial.begin(9600);
 
-    // Init motor
-    motorPinInit();
 }
 
 void loop()
 {
-    // put your main code here, to run repeatedly:
-    static int value = 0;
 
-    // Read sensor value
-    value = getSensorValue();
-    switch (value)
-    {
-        // Move forward
-    case 0:
-        aller();
-        break;
-
-        //Sharp Right
-    case -3:
-        aSharpDroite();
-        break;
-
-        // Big Right
-    case -2:
-        aGrandeDroite();
-        break;
-
-        // Move right
-    case -1:
-        aPetitDroite();
-        break;
-
-        // Move left
-    case 1:
-        aPetitGauche();
-        break;
-
-    case 2:
-        // Big left
-        aGrandeGauche();
-        break;
-
-        // Sharp left
-    case 3:
-        aSharpGauche();
-        break;
-
-        // Stop
-    default:
-        _stop();
-        break;
+    while(premiereCliquer){
+        // Init moteur
+        motorPinInit();
+        servoMoteurPinInit();
     }
+    while(deuxiemeCliquer)
+        {
+            // put your main code here, to run repeatedly:
+            static int value = 0;
+
+            // Read sensor value
+            value = getSensorValue();
+            switch (value)
+            {
+                // Move forward
+            case 0:
+                aller();
+                break;
+
+                //Sharp Right
+            case -3:
+                aSharpDroite();
+                break;
+
+                // Big Right
+            case -2:
+                aGrandeDroite();
+                break;
+
+                // Move right
+            case -1:
+                aPetitDroite();
+                break;
+
+                // Move left
+            case 1:
+                aPetitGauche();
+                break;
+
+            case 2:
+                // Big left
+                aGrandeGauche();
+                break;
+
+                // Sharp left
+            case 3:
+                aSharpGauche();
+                break;
+                // Lancer Deapeau
+            case 4:
+                servoMoteurLancerDeapeau();
+                break;
+
+                // Stop
+            default:
+                _stop();
+                break;
+            }
+        }
 }
 
 // Init sensor model
@@ -153,11 +174,29 @@ int sensorValueFront()
         return 1;
     }
 }
+// Init servo moteur
+void servoMoteurPinInit()
+{
+    servoflag.attach(SERVO_MOTEUR_PIN);
+}
+
 // Init motor model
 void motorPinInit()
 {
     pinMode(MOTOR_LEFT_SENS, OUTPUT);
     pinMode(MOTOR_RIGHT_SENS, OUTPUT);
+}
+
+// Function servo moteur
+// Feature: Lancer le drapeau.
+
+void servoMoteurLancerDeapeau()
+{
+    for (angle = 0; angle < 60; angle += 3)
+    {
+        servoflag.write(angle);
+        delay(15);
+    }
 }
 
 // Function stop
@@ -313,6 +352,14 @@ int getSensorValue()
         else
         {
             error = 3; // Sharp Droite
+        }
+    }
+    else if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
+    {
+        delay(100);
+        if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
+        {
+            error = 4;
         }
     }
     return error;
