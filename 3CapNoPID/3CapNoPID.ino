@@ -29,8 +29,6 @@ int SPEED_TURN_PETIT_LOW = 160;
 int SPEED_TURN_PETIT_HIGH = 240;
 int SPEED_TURN_GRANDE_LOW = 155;
 int SPEED_TURN_GRANDE_HIGH = 240;
-int SPEED_TURN_SHARP_LOW = 140;
-int SPEED_TURN_SHARP_HIGH = 240;
 
 int SPEED_ADJUST_LINE = 200;
 int SPEED_TRIG = 0;
@@ -137,11 +135,6 @@ void loop()
         Serial.println("Aller!");
         break;
 
-      //Sharp Right
-      case 3:
-        aSharpDroite();
-        Serial.println("Sharp Droite");
-        break;
 
       // Big Right
       case 2:
@@ -167,11 +160,6 @@ void loop()
         Serial.println("Grande Gauche");
         break;
 
-      // Sharp left
-      case -3:
-        aSharpGauche();
-        Serial.println("Sharp Gauche");
-        break;
       // Lancer Deapeau
       case 4:
         servoMoteurLancerDeapeau();
@@ -334,19 +322,7 @@ void aGrandeGauche()
   delay(TIME_ADJUST);
 }
 
-// Function aSharpGauche
-// Feature: Make vehicle turn big left, then slow down for a moment
-void aSharpGauche()
-{
 
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_SHARP_LOW);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_SHARP_HIGH);
-
-  delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
-}
 
 // Function aPetitDroite
 // Feature: Make vehicle turn right, then slow down for a moment
@@ -378,17 +354,6 @@ void aGrandeDroite()
 
 // Function aSharpDroite
 // Feature: Make vehicle turn sharp right, then slow down for a moment
-void aSharpDroite()
-{
-
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_SHARP_HIGH);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_SHARP_LOW);
-
-  delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
-}
 
 // Function Read Sensors' Values
 int getSensorValue()
