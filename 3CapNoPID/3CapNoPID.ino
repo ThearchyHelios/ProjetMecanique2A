@@ -242,6 +242,7 @@ void buttonInitPin()
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);
 }
+
 // Init servo moteur
 void servoMoteurPinInit()
 {
@@ -267,12 +268,12 @@ void servoMoteurLancerDeapeau()
 
   analogWrite(MOTOR_LEFT_VITESSE, 100);
   analogWrite(MOTOR_RIGHT_VITESSE, 100);
-  delay(1000);
+
   for (angle = 0; angle <= 20; angle += 1) {
     servoflag.write(angle);
     delay(15);
   }
-
+  delay(1000);
 
 
 }
@@ -289,7 +290,6 @@ void _stop()
 // Feature: Make vehicle move forward
 void aller()
 {
-
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_LINE);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_LINE);
 }
@@ -298,7 +298,6 @@ void aller()
 // Feature: Make vehicle turn left, then slow down for a moment
 void aPetitGauche()
 {
-
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_LOW);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_HIGH);
 
@@ -312,7 +311,6 @@ void aPetitGauche()
 // Feature: Make vehicle turn sharp left, then slow down for a moment
 void aGrandeGauche()
 {
-
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_LOW);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_GRANDE_HIGH);
 
@@ -328,7 +326,6 @@ void aGrandeGauche()
 // Feature: Make vehicle turn right, then slow down for a moment
 void aPetitDroite()
 {
-
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_HIGH);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_LOW);
 
@@ -342,7 +339,6 @@ void aPetitDroite()
 // Feature: Make vehicle turn big right, then slow down for a moment
 void aGrandeDroite()
 {
-
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_HIGH);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_GRANDE_LOW);
 
