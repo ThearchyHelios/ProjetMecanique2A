@@ -20,8 +20,8 @@ Ultrasonic sensor_left(A0);
 Ultrasonic sensor_front(A2);
 Ultrasonic sensor_right(A3);
 
-// Pour définir la vitèsse.
-// la valeur de la vitèsse est entre 0, 255
+// Pour définir la vitesse.
+// la valeur de la vitesse est entre 0, 255
 int SPEED_LINE = 180;
 int SPEED_TURN_PETIT_LOW = 160;
 int SPEED_TURN_PETIT_HIGH = 240;
