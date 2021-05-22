@@ -62,7 +62,6 @@ void setup()
   Serial.begin(9600);
   buttonInitPin();
   Serial.println("Setup successful");
-
 }
 
 void loop()
@@ -70,10 +69,9 @@ void loop()
   Serial.println("IN Loop");
   buttonState = digitalRead(BUTTON_PIN);
 
-
   while (true)
   {
-    if (buttonState == LOW)  // Pour compter le nombre d'appuie sur le bouton.
+    if (buttonState == LOW) // Pour compter le nombre d'appuie sur le bouton.
     {
       COUNT += 1;
       delay(500);
@@ -99,7 +97,7 @@ void loop()
       Serial.println("Button Pressed 2");
       break;
     }
-    else if (COUNT == 3) retourner au Etat 0.
+    else if (COUNT == 3) // Retourner au Etat 0.
     {
       COUNT = 0;
       premiereCliquer = false;
@@ -127,56 +125,55 @@ void loop()
     value = getSensorValue();
     switch (value)
     {
-      // Avancer tout droit.
-      case 0:
-        aller();
-        Serial.println("Aller!");
-        break;
+    // Avancer tout droit.
+    case 0:
+      aller();
+      Serial.println("Aller!");
+      break;
 
+    // Tourner fortement à droite.
+    case 2:
+      aGrandeDroite();
+      Serial.println("Grande Droite");
+      break;
 
-      // Tourner fortement à droite.
-      case 2:
-        aGrandeDroite();
-        Serial.println("Grande Droite");
-        break;
+    // Tourner légèrement à droite.
+    case 1:
+      aPetitDroite();
+      Serial.println("Petit Droite");
+      break;
 
-      // Tourner légèrement à droite.
-      case 1:
-        aPetitDroite();
-        Serial.println("Petit Droite");
-        break;
+    // Tourner légèrement à gauche.
+    case -1:
+      aPetitGauche();
+      Serial.println("Petit Gauche");
+      break;
 
-      // Tourner légèrement à gauche.
-      case -1:
-        aPetitGauche();
-        Serial.println("Petit Gauche");
-        break;
+    case -2:
+      // Tourner fortement à gauche.
+      aGrandeGauche();
+      Serial.println("Grande Gauche");
+      break;
 
-      case -2:
-        // Tourner fortement à gauche.
-        aGrandeGauche();
-        Serial.println("Grande Gauche");
-        break;
+    // Jeter le drapeau.
+    case 4:
+      servoMoteurLancerDeapeau();
+      _stop();
+      Serial.println("Lancer Deapeau");
+      COUNT = 3;
+      //        exit(1);
+      break;
 
-      // Jeter le drapeau.
-      case 4:
-        servoMoteurLancerDeapeau();
-        _stop();
-        Serial.println("Lancer Deapeau");
-        COUNT = 3;
-        //        exit(1);
-        break;
-
-      // Arret
-      default:
-        aller();
-        Serial.println("Aller! Default");
-        break;
-    }
-    if (COUNT == 3) {
+    // Arret
+    default:
+      aller();
+      Serial.println("Aller! Default");
       break;
     }
-
+    if (COUNT == 3)
+    {
+      break;
+    }
   }
 }
 
@@ -267,13 +264,12 @@ void servoMoteurLancerDeapeau()
   analogWrite(MOTOR_LEFT_VITESSE, 100);
   analogWrite(MOTOR_RIGHT_VITESSE, 100);
 
-  for (angle = 0; angle <= 20; angle += 1) {
+  for (angle = 0; angle <= 20; angle += 1)
+  {
     servoflag.write(angle);
     delay(15);
   }
   delay(1000);
-
-
 }
 
 // Fonction d'arret
@@ -317,8 +313,6 @@ void aGrandeGauche()
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
   delay(TIME_ADJUST);
 }
-
-
 
 // Fonction de tourner légèrement à droite.
 // Principe: Faire le véhicule tourner à droite, puis ralentir pendant un certain temps.
@@ -391,7 +385,6 @@ int getSensorValue()
       error = 4;
     }
   }
-
 
   return error;
 }
