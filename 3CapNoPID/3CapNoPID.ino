@@ -378,17 +378,6 @@ int getSensorValue()
   {
     error = -1; //010 Petit Gauche
   }
-  //    else if (sensor[0] == 0 && sensor[1] == 0 && sensor[2] == 0)
-  //    {
-  //        if (error == -2)
-  //        {
-  //            error = -3; // Sharp Gauche
-  //        }
-  //        else
-  //        {
-  //            error = 3; // Sharp Droite
-  //        }
-  //    }
 
   else if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
   {
