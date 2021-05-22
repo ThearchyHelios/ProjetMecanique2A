@@ -3,9 +3,7 @@
 
 Servo servoflag;
 
-// 一共两个马达， 两个传感器，前轮两个珠子 xD，后轮各两个马达
-
-// Define Motor Pin
+//Pour définir les Pins de Moteur, Led, Servo moteur, et bouton.
 #define MOTOR_LEFT_VITESSE 6
 #define MOTOR_LEFT_SENS 7
 #define MOTOR_RIGHT_SENS 4
@@ -17,13 +15,13 @@ Servo servoflag;
 
 #define BUTTON_PIN 2
 
-// Define Sensor Pin
+// Pour définir les pins de capteur ultrason.
 Ultrasonic sensor_left(A0);
 Ultrasonic sensor_front(A2);
 Ultrasonic sensor_right(A3);
 
-// Define Speed
-// PWN sont entre 0, 255
+// Pour définir la vitèsse.
+// la valeur de la vitèsse est entre 0, 255
 int SPEED_LINE = 180;
 int SPEED_TURN_PETIT_LOW = 160;
 int SPEED_TURN_PETIT_HIGH = 240;
@@ -33,7 +31,7 @@ int SPEED_TURN_GRANDE_HIGH = 240;
 int SPEED_ADJUST_LINE = 200;
 int SPEED_TRIG = 0;
 
-// Init delay temp
+// Initialisation du temps de delay.
 int TIME_TURN = 2000;
 int TIME_ADJUST = 1000;
 
@@ -48,13 +46,13 @@ float VITESSE_CM_PAR_SECOND = 340.00;
 bool premiereCliquer = false;
 bool deuxiemeCliquer = false;
 
-// Init output value
+// Initialisation de la valeur sortie(Output).
 int error = 0;
 
-// A tableau with 2 sensors
+// le tableau de 3 capteurs.
 int sensor[3] = {0, 0, 0};
 
-// Read Sensors' first value
+// Lire la première valeur du capteur.
 int getSensorValue(void);
 
 void setup()
@@ -75,14 +73,14 @@ void loop()
 
   while (true)
   {
-    if (buttonState == LOW)
+    if (buttonState == LOW)  // Pour compter le nombre d'appuie sur le bouton.
     {
       COUNT += 1;
       delay(500);
       break;
     }
 
-    else if (COUNT == 1)
+    else if (COUNT == 1) //Etat 1 initialisation.
     {
       premiereCliquer = true;
       deuxiemeCliquer = false;
@@ -93,7 +91,7 @@ void loop()
       delay(50);
       break;
     }
-    else if (COUNT == 2)
+    else if (COUNT == 2) //Etat 2 Moteur commence à fonctionner.
     {
       digitalWrite(LED_PIN, HIGH);
       premiereCliquer = false;
@@ -101,7 +99,7 @@ void loop()
       Serial.println("Button Pressed 2");
       break;
     }
-    else if (COUNT == 3)
+    else if (COUNT == 3) retourner au Etat 0.
     {
       COUNT = 0;
       premiereCliquer = false;
@@ -111,7 +109,7 @@ void loop()
     break;
   }
 
-  Serial.println(COUNT);
+  Serial.println(COUNT); //Initialisation de moteur et servo moteur.
   while (premiereCliquer)
   {
     // Init moteur
@@ -125,42 +123,42 @@ void loop()
     static int value = 0;
     error = 0;
 
-    // Read sensor value
+    // Lire la valeur de capteur.
     value = getSensorValue();
     switch (value)
     {
-      // Move forward
+      // Avancer tout droit.
       case 0:
         aller();
         Serial.println("Aller!");
         break;
 
 
-      // Big Right
+      // Tourner fortement à droite.
       case 2:
         aGrandeDroite();
         Serial.println("Grande Droite");
         break;
 
-      // Move right
+      // Tourner légèrement à droite.
       case 1:
         aPetitDroite();
         Serial.println("Petit Droite");
         break;
 
-      // Move left
+      // Tourner légèrement à gauche.
       case -1:
         aPetitGauche();
         Serial.println("Petit Gauche");
         break;
 
       case -2:
-        // Big left
+        // Tourner fortement à gauche.
         aGrandeGauche();
         Serial.println("Grande Gauche");
         break;
 
-      // Lancer Deapeau
+      // Jeter le drapeau.
       case 4:
         servoMoteurLancerDeapeau();
         _stop();
@@ -169,7 +167,7 @@ void loop()
         //        exit(1);
         break;
 
-      // Stop
+      // Arret
       default:
         aller();
         Serial.println("Aller! Default");
@@ -182,7 +180,7 @@ void loop()
   }
 }
 
-// Init sensor model
+// Initialisation de model de capteur.
 
 int sensorValueLeft()
 {
@@ -235,7 +233,7 @@ int sensorValueFront()
   }
 }
 
-//Init Button moteur
+//Initialisation de bouton.
 
 void buttonInitPin()
 {
@@ -243,13 +241,13 @@ void buttonInitPin()
   pinMode(LED_PIN, OUTPUT);
 }
 
-// Init servo moteur
+// Initialisation de servo moteur.
 void servoMoteurPinInit()
 {
   servoflag.attach(SERVO_MOTEUR_PIN);
 }
 
-// Init motor model
+// Initialisation model de moteur.
 void motorPinInit()
 {
   pinMode(MOTOR_LEFT_SENS, OUTPUT);
@@ -260,8 +258,8 @@ void motorPinInit()
   digitalWrite(MOTOR_RIGHT_SENS, HIGH);
 }
 
-// Function servo moteur
-// Feature: Lancer le drapeau.
+// Fonction de servo moteur.
+// Principe: Jeter le drapeau.
 
 void servoMoteurLancerDeapeau()
 {
@@ -278,24 +276,24 @@ void servoMoteurLancerDeapeau()
 
 }
 
-// Function stop
-// Feature: Stop the vehicle
+// Fonction d'arret
+// Principe: Arreter le véhicule
 void _stop()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TRIG);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TRIG);
 }
 
-// Function aller
-// Feature: Make vehicle move forward
+// Fonction d'aller tout droit.
+// Principe: Faire le véhicule avancer tout droit.
 void aller()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_LINE);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_LINE);
 }
 
-// Function aPetitGauche
-// Feature: Make vehicle turn left, then slow down for a moment
+// Fonction de tourner légèrement à gauche.
+// Principe: Faire le véhicule tourner à gauche, puis ralentir pendant un certain temps.
 void aPetitGauche()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_LOW);
@@ -307,8 +305,8 @@ void aPetitGauche()
   delay(TIME_ADJUST);
 }
 
-// Function aGrandeGauche
-// Feature: Make vehicle turn sharp left, then slow down for a moment
+// Fonction de tourner fortement à gauche.
+// Principe: Faire le véhicule tourner fortement à gauche, puis ralentir pendant un certain temps.
 void aGrandeGauche()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_LOW);
@@ -322,8 +320,8 @@ void aGrandeGauche()
 
 
 
-// Function aPetitDroite
-// Feature: Make vehicle turn right, then slow down for a moment
+// Fonction de tourner légèrement à droite.
+// Principe: Faire le véhicule tourner à droite, puis ralentir pendant un certain temps.
 void aPetitDroite()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_HIGH);
@@ -335,8 +333,8 @@ void aPetitDroite()
   delay(TIME_ADJUST);
 }
 
-// Function aGrandeDroite
-// Feature: Make vehicle turn big right, then slow down for a moment
+// Fonction de tourner fortement à droite.
+// Principe: Faire le véhicule tourner fortement à droite, puis ralentir pendant un certain temps.
 void aGrandeDroite()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_HIGH);
@@ -348,20 +346,17 @@ void aGrandeDroite()
   delay(TIME_ADJUST);
 }
 
-// Function aSharpDroite
-// Feature: Make vehicle turn sharp right, then slow down for a moment
-
-// Function Read Sensors' Values
+// Fonction de lire les valeur des capteurs.
 int getSensorValue()
 {
-  // Read semsors' signals
+  // Lire le signal de capteur.
   sensor[0] = sensorValueLeft();
   sensor[1] = sensorValueRight();
   sensor[2] = sensorValueFront();
 
   if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
   {
-    error = 0; // 110 Aller
+    error = 0; // 110 Aller tout droit
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
   {
