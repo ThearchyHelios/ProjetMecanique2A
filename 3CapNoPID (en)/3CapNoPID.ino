@@ -15,13 +15,13 @@ Servo servoflag;
 
 #define BUTTON_PIN 2
 
-// Pour définir les pins de capteur ultrason.
+// Pour définir les pins des capteurs ultrasons.
 Ultrasonic sensor_left(A0);
 Ultrasonic sensor_front(A2);
 Ultrasonic sensor_right(A3);
 
 // Pour définir la vitesse.
-// la valeur de la vitesse est entre 0, 255
+// La valeur de la vitesse se trouve entre 0, 255.
 int SPEED_LINE = 180;
 int SPEED_TURN_PETIT_LOW = 160;
 int SPEED_TURN_PETIT_HIGH = 240;
@@ -31,7 +31,7 @@ int SPEED_TURN_GRANDE_HIGH = 240;
 int SPEED_ADJUST_LINE = 200;
 int SPEED_TRIG = 0;
 
-// Initialisation du temps de delay.
+// Initialisation du temps de "delay".
 int TIME_TURN = 2000;
 int TIME_ADJUST = 1000;
 
@@ -41,15 +41,15 @@ int angle = 0;
 
 int COUNT = 0;
 
-float VITESSE_CM_PAR_SECOND = 340.00;
+float VITESSE_CM_PAR_SECOND = 340.00; //On définit la vitesse des ondes sonores dans l'air.
 
-bool premiereCliquer = false;
+bool premiereCliquer = false; // On définit par défaut les deux pressions boutons.
 bool deuxiemeCliquer = false;
 
-// Initialisation de la valeur sortie(Output).
+// Initialisation de la valeur de sortie(Output).
 int error = 0;
 
-// le tableau de 3 capteurs.
+// Le tableau de 3 capteurs.
 int sensor[3] = {0, 0, 0};
 
 // Lire la première valeur du capteur.
@@ -78,26 +78,26 @@ void loop()
       break;
     }
 
-    else if (COUNT == 1) //Etat 1 initialisation.
+    else if (COUNT == 1) //Etat 1 : initialisation.
     {
       premiereCliquer = true;
       deuxiemeCliquer = false;
       Serial.println("Button Pressed 1");
-      digitalWrite(LED_PIN, HIGH);
+      digitalWrite(LED_PIN, HIGH); //La LED verte de la carte gestion de puissance s'allume pendant 50ms,
       delay(50);
-      digitalWrite(LED_PIN, LOW);
+      digitalWrite(LED_PIN, LOW);//Puis s'éteint.
       delay(50);
       break;
     }
-    else if (COUNT == 2) //Etat 2 Moteur commence à fonctionner.
+    else if (COUNT == 2) //Etat 2 : Les moteurs commencent à fonctionner.
     {
-      digitalWrite(LED_PIN, HIGH);
+      digitalWrite(LED_PIN, HIGH); //Allumage de la LED verte de la carte gestion de puissance.
       premiereCliquer = false;
       deuxiemeCliquer = true;
       Serial.println("Button Pressed 2");
       break;
     }
-    else if (COUNT == 3) // Retourner au Etat 0.
+    else if (COUNT == 3) // On retourne à l'Etat 0 ici.
     {
       COUNT = 0;
       premiereCliquer = false;
@@ -107,23 +107,22 @@ void loop()
     break;
   }
 
-  Serial.println(COUNT); //Initialisation de moteur et servo moteur.
+  Serial.println(COUNT); //Initialisation des moteurs et du servomoteur.
   while (premiereCliquer)
   {
-    // Init moteur
-    motorPinInit();
-    servoMoteurPinInit();
+    motorPinInit();//Initilisation moteur.
+    servoMoteurPinInit();//Initialisation servomoteur.
     break;
   }
   while (deuxiemeCliquer)
   {
-    // put your main code here, to run repeatedly:
+    
     static int value = 0;
     error = 0;
 
-    // Lire la valeur de capteur.
+    // On lit ici la valeur du capteur.
     value = getSensorValue();
-    switch (value)
+    switch (value)//On a donc plusieurs possibilités de "direction" du robot en fonction de cette valeur. 
     {
     // Avancer tout droit.
     case 0:
@@ -155,11 +154,11 @@ void loop()
       Serial.println("Grande Gauche");
       break;
 
-    // Jeter le drapeau.
+    // Déployer le drapeau.
     case 4:
-      servoMoteurLancerDeapeau();
+      servoMoteurLancerDrapeau();
       _stop();
-      Serial.println("Lancer Deapeau");
+      Serial.println("Lancer Drapeau");
       COUNT = 3;
       //        exit(1);
       break;
@@ -177,14 +176,14 @@ void loop()
   }
 }
 
-// Initialisation de model de capteur.
+// Initialisation des 3 capteurs.
 
-int sensorValueLeft()
+int sensorValueLeft() //Capteur de gauche.
 {
   long distance;
   distance = sensor_left.MeasureInCentimeters();
   delay(10);
-
+	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
   if (distance > 15)
   {
     return 0;
@@ -196,12 +195,12 @@ int sensorValueLeft()
   }
 }
 
-int sensorValueRight()
+int sensorValueRight()//Capteur de droite.
 {
   long distance;
   distance = sensor_right.MeasureInCentimeters();
   delay(10);
-
+	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
   if (distance > 15)
   {
     return 0;
@@ -213,12 +212,12 @@ int sensorValueRight()
   }
 }
 
-int sensorValueFront()
+int sensorValueFront()//Capteur Avant.
 {
   long distance;
   distance = sensor_front.MeasureInCentimeters();
   delay(10);
-
+	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
   if (distance > 25)
   {
     return 0;
@@ -230,21 +229,21 @@ int sensorValueFront()
   }
 }
 
-//Initialisation de bouton.
 
+//Fonction initialisation du bouton.
 void buttonInitPin()
 {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   pinMode(LED_PIN, OUTPUT);
 }
 
-// Initialisation de servo moteur.
+//Fonction initialisation du servomoteur.
 void servoMoteurPinInit()
 {
   servoflag.attach(SERVO_MOTEUR_PIN);
 }
 
-// Initialisation model de moteur.
+//Fonction initialisation des deux moteurs.
 void motorPinInit()
 {
   pinMode(MOTOR_LEFT_SENS, OUTPUT);
@@ -258,13 +257,13 @@ void motorPinInit()
 // Fonction de servo moteur.
 // Principe: Jeter le drapeau.
 
-void servoMoteurLancerDeapeau()
+void servoMoteurLancerDrapeau()
 {
 
   analogWrite(MOTOR_LEFT_VITESSE, 100);
   analogWrite(MOTOR_RIGHT_VITESSE, 100);
 
-  for (angle = 0; angle <= 20; angle += 1)
+  for (angle = 0; angle <= 20; angle += 1)//Avec une inclinaison de 20° de la branche du servomoteur, on peut déployer la drapeau.
   {
     servoflag.write(angle);
     delay(15);
@@ -273,23 +272,23 @@ void servoMoteurLancerDeapeau()
 }
 
 // Fonction d'arret
-// Principe: Arreter le véhicule
+// Principe : Arrêter le véhicule
 void _stop()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TRIG);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TRIG);
 }
 
-// Fonction d'aller tout droit.
-// Principe: Faire le véhicule avancer tout droit.
+// Fonction pour aller tout droit.
+// Principe : Faire avancer le véhicule tout droit.
 void aller()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_LINE);
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_LINE);
 }
 
-// Fonction de tourner légèrement à gauche.
-// Principe: Faire le véhicule tourner à gauche, puis ralentir pendant un certain temps.
+// Fonction pour tourner légèrement à gauche.
+// Principe : Faire tourner le véhicule à gauche, puis ralentir pendant un certain temps.
 void aPetitGauche()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_LOW);
@@ -301,8 +300,8 @@ void aPetitGauche()
   delay(TIME_ADJUST);
 }
 
-// Fonction de tourner fortement à gauche.
-// Principe: Faire le véhicule tourner fortement à gauche, puis ralentir pendant un certain temps.
+// Fonction pour tourner fortement à gauche.
+// Principe : Faire tourner le véhicule fortement à gauche, puis ralentir pendant un certain temps.
 void aGrandeGauche()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_LOW);
@@ -314,8 +313,8 @@ void aGrandeGauche()
   delay(TIME_ADJUST);
 }
 
-// Fonction de tourner légèrement à droite.
-// Principe: Faire le véhicule tourner à droite, puis ralentir pendant un certain temps.
+// Fonction pour tourner légèrement à droite.
+// Principe : Faire tourner le véhicule à droite, puis ralentir pendant un certain temps.
 void aPetitDroite()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_PETIT_HIGH);
@@ -327,8 +326,8 @@ void aPetitDroite()
   delay(TIME_ADJUST);
 }
 
-// Fonction de tourner fortement à droite.
-// Principe: Faire le véhicule tourner fortement à droite, puis ralentir pendant un certain temps.
+// Fonction pour tourner fortement à droite.
+// Principe : Faire tourner le véhicule fortement à droite, puis ralentir pendant un certain temps.
 void aGrandeDroite()
 {
   analogWrite(MOTOR_LEFT_VITESSE, SPEED_TURN_GRANDE_HIGH);
@@ -340,46 +339,46 @@ void aGrandeDroite()
   delay(TIME_ADJUST);
 }
 
-// Fonction de lire les valeur des capteurs.
+// Fonction qui permet de lire les valeurs des capteurs.
 int getSensorValue()
 {
-  // Lire le signal de capteur.
-  sensor[0] = sensorValueLeft();
-  sensor[1] = sensorValueRight();
-  sensor[2] = sensorValueFront();
+  // On lit le signal des capteurs.
+  sensor[0] = sensorValueLeft(); //Valeur capteur gauche.
+  sensor[1] = sensorValueRight();//Valeur capteur droite.
+  sensor[2] = sensorValueFront();//Valeur capteur avant.
 
   if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
   {
-    error = 0; // 110 Aller tout droit
+    error = 0; // 110 Aller tout droit..
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
   {
-    error = -2; // 011 Grande Gauche
+    error = -2; // 011 Grande Gauche.
   }
   else if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 1)
   {
-    error = 2; // 101 Grande Droite
+    error = 2; // 101 Grande Droite.
   }
   else if (sensor[0] == 0 && sensor[1] == 0 && sensor[2] == 1)
   {
-    error = 0; // 001 Arreter (Error mais Aller)
+    error = 0; // 001 Arrêter (Error mais Aller).
   }
   else if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 0)
   {
-    error = 1; //100 Petit Droite
+    error = 1; //100 Petite Droite.
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 0)
   {
-    error = -1; //010 Petit Gauche
+    error = -1; //010 Petite Gauche.
   }
-
+	//Fonction pour l'arrêt.
   else if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
   {
     delay(1000);
     sensor[0] = sensorValueLeft();
     sensor[1] = sensorValueRight();
     sensor[2] = sensorValueFront();
-
+		//On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
     if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
     {
       error = 4;
