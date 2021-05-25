@@ -22,18 +22,18 @@ Ultrasonic sensor_right(A3);
 
 // Pour définir la vitesse.
 // La valeur de la vitesse se trouve entre 0, 255.
-int SPEED_LINE = 180;
-int SPEED_TURN_PETIT_LOW = 160;
-int SPEED_TURN_PETIT_HIGH = 240;
-int SPEED_TURN_GRANDE_LOW = 155;
-int SPEED_TURN_GRANDE_HIGH = 240;
+int SPEED_LINE = 255;
+int SPEED_TURN_PETIT_LOW = 115;
+int SPEED_TURN_PETIT_HIGH = 245;
+int SPEED_TURN_GRANDE_LOW = 30;
+int SPEED_TURN_GRANDE_HIGH = 255;
 
-int SPEED_ADJUST_LINE = 200;
+int SPEED_ADJUST_LINE = 220;
 int SPEED_TRIG = 0;
 
 // Initialisation du temps de "delay".
-int TIME_TURN = 2000;
-int TIME_ADJUST = 1000;
+int TIME_TURN = 2150;
+int TIME_ADJUST = 850;
 
 int buttonState = 0;
 
@@ -85,7 +85,7 @@ void loop()
       Serial.println("Button Pressed 1");
       digitalWrite(LED_PIN, HIGH); //La LED verte de la carte gestion de puissance s'allume pendant 50ms,
       delay(50);
-      digitalWrite(LED_PIN, LOW);//Puis s'éteint.
+      digitalWrite(LED_PIN, LOW); //Puis s'éteint.
       delay(50);
       break;
     }
@@ -110,19 +110,19 @@ void loop()
   Serial.println(COUNT); //Initialisation des moteurs et du servomoteur.
   while (premiereCliquer)
   {
-    motorPinInit();//Initilisation moteur.
-    servoMoteurPinInit();//Initialisation servomoteur.
+    motorPinInit();       //Initilisation moteur.
+    servoMoteurPinInit(); //Initialisation servomoteur.
     break;
   }
   while (deuxiemeCliquer)
   {
-    
+
     static int value = 0;
     error = 0;
 
     // On lit ici la valeur du capteur.
     value = getSensorValue();
-    switch (value)//On a donc plusieurs possibilités de "direction" du robot en fonction de cette valeur. 
+    switch (value) //On a donc plusieurs possibilités de "direction" du robot en fonction de cette valeur.
     {
     // Avancer tout droit.
     case 0:
@@ -183,8 +183,8 @@ int sensorValueLeft() //Capteur de gauche.
   long distance;
   distance = sensor_left.MeasureInCentimeters();
   delay(10);
-	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
-  if (distance > 15)
+  //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
+  if (distance > 35)
   {
     return 0;
   }
@@ -195,13 +195,13 @@ int sensorValueLeft() //Capteur de gauche.
   }
 }
 
-int sensorValueRight()//Capteur de droite.
+int sensorValueRight() //Capteur de droite.
 {
   long distance;
   distance = sensor_right.MeasureInCentimeters();
   delay(10);
-	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
-  if (distance > 15)
+  //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
+  if (distance > 35)
   {
     return 0;
   }
@@ -212,13 +212,13 @@ int sensorValueRight()//Capteur de droite.
   }
 }
 
-int sensorValueFront()//Capteur Avant.
+int sensorValueFront() //Capteur Avant.
 {
   long distance;
   distance = sensor_front.MeasureInCentimeters();
   delay(10);
-	//A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur. 
-  if (distance > 25)
+  //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
+  if (distance > 45)
   {
     return 0;
   }
@@ -228,7 +228,6 @@ int sensorValueFront()//Capteur Avant.
     return 1;
   }
 }
-
 
 //Fonction initialisation du bouton.
 void buttonInitPin()
@@ -263,7 +262,7 @@ void servoMoteurLancerDrapeau()
   analogWrite(MOTOR_LEFT_VITESSE, 100);
   analogWrite(MOTOR_RIGHT_VITESSE, 100);
 
-  for (angle = 0; angle <= 20; angle += 1)//Avec une inclinaison de 20° de la branche du servomoteur, on peut déployer la drapeau.
+  for (angle = 0; angle <= 20; angle += 1) //Avec une inclinaison de 20° de la branche du servomoteur, on peut déployer la drapeau.
   {
     servoflag.write(angle);
     delay(15);
@@ -295,9 +294,9 @@ void aPetitGauche()
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_HIGH);
 
   delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
+  // analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+  // analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
+  // delay(TIME_ADJUST);
 }
 
 // Fonction pour tourner fortement à gauche.
@@ -321,9 +320,9 @@ void aPetitDroite()
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_LOW);
 
   delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
+  // analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+  // analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
+  // delay(TIME_ADJUST);
 }
 
 // Fonction pour tourner fortement à droite.
@@ -343,9 +342,9 @@ void aGrandeDroite()
 int getSensorValue()
 {
   // On lit le signal des capteurs.
-  sensor[0] = sensorValueLeft(); //Valeur capteur gauche.
-  sensor[1] = sensorValueRight();//Valeur capteur droite.
-  sensor[2] = sensorValueFront();//Valeur capteur avant.
+  sensor[0] = sensorValueLeft();  //Valeur capteur gauche.
+  sensor[1] = sensorValueRight(); //Valeur capteur droite.
+  sensor[2] = sensorValueFront(); //Valeur capteur avant.
 
   if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 0)
   {
@@ -353,11 +352,27 @@ int getSensorValue()
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
   {
-    error = -2; // 011 Grande Gauche.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
+    {
+      error = -2;
+    } // 011 Grande Gauche.
   }
   else if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 1)
   {
-    error = 2; // 101 Grande Droite.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 1)
+    {
+      error = 2;
+    } // 101 Grande Droite.
   }
   else if (sensor[0] == 0 && sensor[1] == 0 && sensor[2] == 1)
   {
@@ -371,14 +386,14 @@ int getSensorValue()
   {
     error = -1; //010 Petite Gauche.
   }
-	//Fonction pour l'arrêt.
+  //Fonction pour l'arrêt.
   else if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
   {
     delay(1000);
     sensor[0] = sensorValueLeft();
     sensor[1] = sensorValueRight();
     sensor[2] = sensorValueFront();
-		//On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
     if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
     {
       error = 4;

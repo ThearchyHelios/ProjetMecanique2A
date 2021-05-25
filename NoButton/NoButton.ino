@@ -22,18 +22,18 @@ Ultrasonic sensor_right(A3);
 
 // Pour définir la vitesse.
 // La valeur de la vitesse se trouve entre 0, 255.
-int SPEED_LINE = 180;
-int SPEED_TURN_PETIT_LOW = 160;
-int SPEED_TURN_PETIT_HIGH = 200;
-int SPEED_TURN_GRANDE_LOW = 140;
-int SPEED_TURN_GRANDE_HIGH = 220;
+int SPEED_LINE = 255;
+int SPEED_TURN_PETIT_LOW = 115;
+int SPEED_TURN_PETIT_HIGH = 245;
+int SPEED_TURN_GRANDE_LOW = 30;
+int SPEED_TURN_GRANDE_HIGH = 255;
 
-int SPEED_ADJUST_LINE = 180;
+int SPEED_ADJUST_LINE = 220;
 int SPEED_TRIG = 0;
 
 // Initialisation du temps de "delay".
-int TIME_TURN = 2000;
-int TIME_ADJUST = 1000;
+int TIME_TURN = 2150;
+int TIME_ADJUST = 850;
 
 int buttonState = 0;
 
@@ -77,50 +77,50 @@ void loop()
   value = getSensorValue();
   switch (value) //On a donc plusieurs possibilités de "direction" du robot en fonction de cette valeur.
   {
-  // Avancer tout droit.
-  case 0:
-    aller();
-    Serial.println("Aller!");
-    break;
+    // Avancer tout droit.
+    case 0:
+      aller();
+      Serial.println("Aller!");
+      break;
 
-  // Tourner fortement à droite.
-  case 2:
-    aGrandeDroite();
-    Serial.println("Grande Droite");
-    break;
+    // Tourner fortement à droite.
+    case 2:
+      aGrandeDroite();
+      Serial.println("Grande Droite");
+      break;
 
-  // Tourner légèrement à droite.
-  case 1:
-    aPetitDroite();
-    Serial.println("Petit Droite");
-    break;
+    // Tourner légèrement à droite.
+    case 1:
+      aPetitDroite();
+      Serial.println("Petit Droite");
+      break;
 
-  // Tourner légèrement à gauche.
-  case -1:
-    aPetitGauche();
-    Serial.println("Petit Gauche");
-    break;
+    // Tourner légèrement à gauche.
+    case -1:
+      aPetitGauche();
+      Serial.println("Petit Gauche");
+      break;
 
-  case -2:
-    // Tourner fortement à gauche.
-    aGrandeGauche();
-    Serial.println("Grande Gauche");
-    break;
+    case -2:
+      // Tourner fortement à gauche.
+      aGrandeGauche();
+      Serial.println("Grande Gauche");
+      break;
 
-  // Déployer le drapeau.
-  case 4:
-    servoMoteurLancerDrapeau();
-    _stop();
-    Serial.println("Lancer Drapeau");
-    COUNT = 3;
-    //        exit(1);
-    break;
+    // Déployer le drapeau.
+    case 4:
+      servoMoteurLancerDrapeau();
+      _stop();
+      Serial.println("Lancer Drapeau");
+      COUNT = 3;
+      exit(1);
+      break;
 
-  // Arret
-  default:
-    aller();
-    Serial.println("Aller! Default");
-    break;
+    // Arret
+    default:
+      aller();
+      Serial.println("Aller! Default");
+      break;
   }
 }
 
@@ -132,7 +132,7 @@ int sensorValueLeft() //Capteur de gauche.
   distance = sensor_left.MeasureInCentimeters();
   delay(10);
   //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
-  if (distance > 15)
+  if (distance > 35)
   {
     return 0;
   }
@@ -149,7 +149,7 @@ int sensorValueRight() //Capteur de droite.
   distance = sensor_right.MeasureInCentimeters();
   delay(10);
   //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
-  if (distance > 15)
+  if (distance > 35)
   {
     return 0;
   }
@@ -166,7 +166,7 @@ int sensorValueFront() //Capteur Avant.
   distance = sensor_front.MeasureInCentimeters();
   delay(10);
   //A partir d'un certaine disatnce mesurée, on va retourner soit la valeur 0 ou 1 pour ce capteur.
-  if (distance > 25)
+  if (distance > 45)
   {
     return 0;
   }
@@ -242,9 +242,9 @@ void aPetitGauche()
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_HIGH);
 
   delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
+  //  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+  //  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
+  //  delay(TIME_ADJUST);
 }
 
 // Fonction pour tourner fortement à gauche.
@@ -268,9 +268,9 @@ void aPetitDroite()
   analogWrite(MOTOR_RIGHT_VITESSE, SPEED_TURN_PETIT_LOW);
 
   delay(TIME_TURN);
-  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
-  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
-  delay(TIME_ADJUST);
+  //  analogWrite(MOTOR_LEFT_VITESSE, SPEED_ADJUST_LINE);
+  //  analogWrite(MOTOR_RIGHT_VITESSE, SPEED_ADJUST_LINE);
+  //  delay(TIME_ADJUST);
 }
 
 // Fonction pour tourner fortement à droite.
@@ -300,23 +300,56 @@ int getSensorValue()
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
   {
-    error = -2; // 011 Grande Gauche.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 1)
+    {
+      error = -2;
+    } // 011 Grande Gauche.
   }
   else if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 1)
   {
-    error = 2; // 101 Grande Droite.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 1)
+    {
+      error = 2;
+    } // 101 Grande Droite.
   }
   else if (sensor[0] == 0 && sensor[1] == 0 && sensor[2] == 1)
   {
     error = 0; // 001 Arrêter (Error mais Aller).
   }
+
   else if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 0)
   {
-    error = 1; //100 Petite Droite.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 1 && sensor[1] == 0 && sensor[2] == 0)
+    {
+      error = 1;
+    } //100 Petite Droite.
   }
   else if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 0)
   {
-    error = -1; //010 Petite Gauche.
+    delay(100);
+    sensor[0] = sensorValueLeft();
+    sensor[1] = sensorValueRight();
+    sensor[2] = sensorValueFront();
+    //On recommence ici à retourner les valeurs détectées par les capteur 1 seconde après, pour voir si au moins un des capteurs retourne 0 (donc pas d'arrêt) ou s'il retourne tous 1, en l'occurence le robot s'arrêtera.
+    if (sensor[0] == 0 && sensor[1] == 1 && sensor[2] == 0)
+    {
+      error = -1;
+    } //010 Petite Gauche.
   }
   //Fonction pour l'arrêt.
   else if (sensor[0] == 1 && sensor[1] == 1 && sensor[2] == 1)
