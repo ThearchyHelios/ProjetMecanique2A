@@ -2,5 +2,5 @@
     "board": "arduino:avr:uno",
     "port": "/dev/tty.usbmodem143101",
     "programmer": "arduino:avrispmkii",
-    "sketch": "3CapNoPID/3CapNoPID.ino"
+    "sketch": "3CapNoPID (en)/3CapNoPID.ino"
 }
