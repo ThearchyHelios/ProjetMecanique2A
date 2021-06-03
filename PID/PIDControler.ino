@@ -6,7 +6,7 @@ struct PID
     float kd;
 };
 typedef struct PID _PID;
-
+int MAX_MOTOR_PWM = 255;
 //定义转向pid参数结构体
 _PID TurnPdate =
     {
